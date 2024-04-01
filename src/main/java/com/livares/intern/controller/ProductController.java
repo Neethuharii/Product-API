@@ -2,6 +2,7 @@ package com.livares.intern.controller;
 
 import java.util.List;
 
+import org.hibernate.query.NativeQuery.ReturnableResultNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ import com.livares.intern.Model.Products;
 import com.livares.intern.service.ProductService;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/products")
 
 public class ProductController {
 
@@ -26,52 +27,39 @@ public class ProductController {
 	@Autowired
 	private ProductService productService;
 	
-	 // Endpoint to create a new product
+	 //To create a new product
 	
-	@PostMapping
-	
-	public ResponseEntity<Products>createProduct(@RequestBody Products products){
-		Products createProduct=productService.createProduct(products);
-		return new ResponseEntity<>(createProduct,HttpStatus.CREATED);
+	@PostMapping("/createProduct")
+	public String  createProduct(@RequestBody Products products){
+		 productService.createProduct(products);
+		 return "product added sucessfully";
 	}
 	
-	// Endpoint to retrieve a product by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<Products>getProductById(@PathVariable Long Id){
-    	Products products=productService.getProductById(Id);
-    	if(products!=null)
-    	{
-    		return new ResponseEntity<>(products,HttpStatus.OK);
-    	}
-    	else {
-    		return new ResponseEntity<>(products,HttpStatus.NOT_FOUND);
-    	}
+	// To retrieve a product by ID
+    @GetMapping("/getProductById/{Id}")
+    public Products getProductById(@PathVariable Long Id){
+    	return productService.getProductById(Id);
+    	
     	
     }
     
-    //Endpoint to retrieve all product
-    @GetMapping
-    public ResponseEntity<Products>getAllProduct(@RequestBody Products products){
-    	List<Products> product =productService.getAllProducts();
-    	return new ResponseEntity<>(products,HttpStatus.OK);
+    //To retrieve all product
+    @GetMapping("/getAllProducts")
+    public  List getAllProduct(@RequestBody Products products){
+    	return productService.getAllProducts();
     			
     }
     
     //Update the product
-    @PutMapping
-    public ResponseEntity<Products> updateProduct(@PathVariable Long id, @RequestBody Products product) {
-        Products updatedProduct = productService.updateProduct(id, product);
-        if (updatedProduct != null) {
-            return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    @PutMapping("/update/{Id}")
+    public Products updateProduct(@PathVariable Long Id, @RequestBody Products products) {
+       return productService.updateProduct(Id, products);
+    
     }
     		
 	//delete the product
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void>deleteProduct(@PathVariable Long Id){
-    	productService.deleteProduct(Id);
-    	return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @DeleteMapping("delete/{Id}")
+    public void deleteProduct(@PathVariable Long Id) {
+        productService.deleteProduct(Id);
     }
 }

@@ -32,8 +32,8 @@ public class ProductService {
     }
 
     // Method to update a product
-    public Products updateProduct(Long id, Products product) {
-        Optional<Products> optionalProduct = productRepository.findById(id);
+    public Products updateProduct(Long Id, Products product) {
+        Optional<Products> optionalProduct = productRepository.findById(Id);
         if (optionalProduct.isPresent()) {
             Products existingProduct = optionalProduct.get();
             existingProduct.setName(product.getName());
@@ -45,7 +45,7 @@ public class ProductService {
     }
 
     // Method to delete a product by ID
-    public void deleteProduct(Long id) {
-        productRepository.deleteById(id);
+    public void deleteProduct(Long Id) {
+        productRepository.deleteById(Id);
     }
 }
